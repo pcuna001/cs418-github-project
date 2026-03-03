@@ -1,0 +1,20 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Contains user database and OTP email database",
+  "repository": {
+    "type": "git",
+    "url": "cs418-github-project"
+  },
+  "license": "ISC",
+  "author": "Patrick Cunanan",
+  "type": "commonjs",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "express.js": "^1.0.0"
+  }
+}
