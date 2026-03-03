@@ -72,6 +72,10 @@ export default function Signup({ onRegister }) {
                     onChange={(e) => updateField("password_confirm", e.target.value)}
                 />
             </Field>
+
+            <button className="signup-button" type="submit">
+                Sign up
+            </button>
         </form>
     )
 }
