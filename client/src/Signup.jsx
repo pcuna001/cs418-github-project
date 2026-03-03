@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Field from './Field';
+import Field from './Field.jsx';
 import "./Signup.css";
 
 export default function Signup({ onRegister }) {
@@ -26,8 +26,52 @@ export default function Signup({ onRegister }) {
         return e;
     }
 
-    function pushInfo(e) {
-        const v = validate();
-        setErrors(v)
+    function submitInfo(e) {
+        const v = validateInfo();
+        setErrors(v);
+
+        if (Object.keys(v).length === 0) {
+            onRegister({
+                username: form.username,
+                email: form.email.toLowerCase(),
+            });
+        }
     }
+
+    return (
+        <form className="signup" onSubmit={submitInfo}>
+            <h3 className="signup-title">Create your account</h3>
+
+            <Field label="Username" error={errors.username}>
+                <input
+                    className={`signup-input ${errors.username ? "error" : ""}`}
+                    value={form.username}
+                    onChange={(e) => updateField("username", e.target.value)}
+                />
+            </Field>
+            <Field label="Email" error={errors.email}>
+                <input
+                    className={`signup-input ${errors.email ? "error" : ""}`}
+                    value={form.email}
+                    onChange={(e) => updateField("email", e.target.value)}
+                />
+            </Field>
+            <Field label="Password" error={errors.password}>
+                <input
+                    type="password"
+                    className={`signup-input ${errors.password ? "error" : ""}`}
+                    value={form.password}
+                    onChange={(e) => updateField("password", e.target.value)}
+                />
+            </Field>
+            <Field label="Confirm password" error={errors.password_confirm}>
+                <input
+                    type="password"
+                    className={`signup-input ${errors.password_confirm ? "error" : ""}`}
+                    value={form.password_confirm}
+                    onChange={(e) => updateField("password_confirm", e.target.value)}
+                />
+            </Field>
+        </form>
+    )
 }
