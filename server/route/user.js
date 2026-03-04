@@ -140,6 +140,49 @@ user.put("/:id", async(req,res) => {
     }
 });
 
+// Password reset
+user.put("/resetpassword", async(req,res) => {
+    try {
+        const{ u_password } = req.body;
+
+        if (!u_password) {
+            return res.status(400).json({
+                status: 400,
+                message: "Required fields empty.",
+                data: null
+            });
+        }
+
+        const hashedPassword = hashPassword(u_password);
+
+        const[result] = await connection.execute(
+            `UPDATE account_info SET u_password = ? WHERE u_id = ?`,
+            [u_username, hashedPassword, req.params.id]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                status: 404,
+                message: "User not found.",
+                data: null
+            });
+        }
+
+        res.status(200).json({
+            status: 200,
+            message: "Successfully reset password.",
+            data: rows
+        });
+
+    } catch (err) {
+        res.status(500).json({
+            status: 500,
+            message: err.message,
+            data: null
+        });
+    }
+});
+
 // Delete user from database
 user.delete("/:id", async(req,res) => {
     try {
@@ -206,7 +249,7 @@ user.post("/login", async(req,res) => {
         }
 
         // Start 2FA via OTP
-        const otp = Math.floor(1000000 + Math.random() * 900000000).toString();
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
         const expiration = new Date(Date.now() + 5 * 60 * 1000);
 
         await connection.execute(`INSERT INTO 2fa_check (email, otp, expiration) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE otp = VALUES(otp), expiration = VALUES(expiration)`,
@@ -241,6 +284,7 @@ user.post("/login", async(req,res) => {
         });
     }
 });
+
 
 // 2FA-OTP API
 user.post("/verify-otp", async(req,res) => {

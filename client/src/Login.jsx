@@ -51,6 +51,8 @@ export default function Login() {
                 return;
             }
 
+            // localStorage.setItem("pendingOtpEmail", enteredEmail);
+
             navigate("/verify-otp");
         } catch (err) {
             setError(err?.message || "Something went wrong");
@@ -102,7 +104,7 @@ export default function Login() {
                     <Link to="/resetpassword" className="button" style={{ textAlign: "center"}}>
                         Forgot password?
                     </Link>
-                    <button className="button" type="submit" disabled={ladoing}>
+                    <button className="button" type="submit" disabled={loading}>
                         {loading ? "Signing in...": "Sign in"}
                     </button>
                 </div>
