@@ -37,8 +37,6 @@ export default function Signup({ onRegister }) {
                 username: form.username,
                 email: form.email.toLowerCase(),
             });
-
-            navigate("/login");
         }
     }
 
