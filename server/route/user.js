@@ -197,7 +197,7 @@ user.post("/login", async(req,res) => {
         const accountInfo = rows[0];
 
         // Check password
-        if (!comparePassword(u_password, accountInfo.u_password)) {
+        if (!checkPassword(u_password, accountInfo.u_password)) {
             return res.status(401).json({
                 status: 401,
                 message: "Invalid password.",
@@ -255,7 +255,7 @@ user.post("/verify-otp", async(req,res) => {
         }
 
         const [rows] = await connection.execute(
-            `SELECT otp, expiration FROM email_otp WHERE email = ? LIMIT 1`, [email]
+            `SELECT otp, expiration FROM 2fa_check WHERE email = ? LIMIT 1`, [email]
         );
 
         if (rows.length === 0) {
@@ -270,7 +270,7 @@ user.post("/verify-otp", async(req,res) => {
         const expiration = new Date(record.expiration);
 
         if (Date.now() > expiration.getTime()) {
-            await connection.execute(`DELETE FROM email_otp WHERE email = ? LIMIT 1`, [email]);
+            await connection.execute(`DELETE FROM 2fa_check WHERE email = ? LIMIT 1`, [email]);
             return res.status(400).json({
                 status: 400,
                 message: "OTP has expired. Please send in a new 2FA request.",
@@ -287,7 +287,7 @@ user.post("/verify-otp", async(req,res) => {
         }
 
         // If OTP is correct, end 2FA and delete OTP
-        await connection.execute(`DELETE FROM email_otp WHERE email = ? LIMIT 1`, [email]);
+        await connection.execute(`DELETE FROM 2fa_check WHERE email = ? LIMIT 1`, [email]);
 
         // Get user information and return safe user
         const[userRows] = await connection.execute(
