@@ -3,7 +3,7 @@ import 'dotenv/config';
 import express from 'express';
 import users from './route/user.js';
 const app=express();
-const port=3000;
+const port=3306;
 
 const myLogger=function(req,res,next){
     console.log('Logged middleware.');
@@ -42,3 +42,5 @@ app.all('/test',(req,res) => {
 app.post('/',(req,res) => {
     res.send("POST API: Helloooooooo!")
 })
+
+export default app;
