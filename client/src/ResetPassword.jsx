@@ -28,7 +28,7 @@ export default function ResetPassword({ onRegister }) {
         const v = validateInfo();
         setErrors(v);
 
-        navigate("/login");
+        //navigate("/login");
     }
 
     return (

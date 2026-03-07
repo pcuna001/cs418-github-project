@@ -102,11 +102,11 @@ user.post("/", async(req,res) => {
 });
 
 // Update user info
-user.put("/:id", async(req,res) => {
+user.put("/updateinfo", async(req,res) => {
     try {
-        const{ u_username, u_password } = req.body;
+        const{ u_username, u_firstname, u_lastname, u_password } = req.body;
 
-        if (!u_username || !u_password) {
+        if (!u_username || !u_firstname || !u_lastname || !u_password) {
             return res.status(400).json({
                 status: 400,
                 message: "Required fields empty.",
@@ -117,8 +117,8 @@ user.put("/:id", async(req,res) => {
         const hashedPassword = hashPassword(u_password);
 
         const[result] = await connection.execute(
-            `UPDATE account_info SET u_username = ?, u_password = ? WHERE u_id = ?`,
-            [u_username, hashedPassword, req.params.id]
+            `UPDATE account_info SET u_username = ?, u_firstname = ?, u_lastname = ?, u_password = ? WHERE u_id = ?`,
+            [u_username, u_firstname, u_lastname, hashedPassword, req.params.id]
         );
 
         if (result.affectedRows === 0) {
