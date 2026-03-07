@@ -6,6 +6,8 @@ import Field from './Field.jsx';
 export default function Signup({ onRegister }) {
     const [form, setForm] = useState({
         username: "",
+        firstName: "",
+        lastName: "",
         email: "",
         password: "",
         password_confirm: "",
@@ -21,6 +23,8 @@ export default function Signup({ onRegister }) {
     function validateInfo() {
         const e = {};
         if (!form.username.trim()) e.username = "Please enter a username!";
+        if (!form.firstName.trim()) e.firstName = "You have not entered your first name.";
+        if (!form.lastName.trim()) e.lastName = "You have not entered your first name.";
         if (!form.email.includes("@")) e.email = "Invalid email address! Please input a correct email address.";
         if (form.password.length < 8) e.password = "Password needs to be 8 characters long."
         if (form.password !== form.password_confirm)
@@ -35,6 +39,8 @@ export default function Signup({ onRegister }) {
         if (Object.keys(v).length === 0) {
             onRegister({
                 username: form.username,
+                firstName: form.firstName,
+                lastName: form.lastName,
                 email: form.email.toLowerCase(),
             });
         }
@@ -49,6 +55,20 @@ export default function Signup({ onRegister }) {
                     className={`signup-input ${errors.username ? "error" : ""}`}
                     value={form.username}
                     onChange={(e) => updateField("username", e.target.value)}
+                />
+            </Field>
+            <Field label="First name" error={errors.firstName}>
+                <input
+                    className={`signup-input ${errors.firstName ? "error" : ""}`}
+                    value={form.firstName}
+                    onChange={(e) => updateField("firstName", e.target.value)}
+                />
+            </Field>
+            <Field label="Last name" error={errors.lastName}>
+                <input
+                    className={`signup-input ${errors.lastName ? "error" : ""}`}
+                    value={form.lastName}
+                    onChange={(e) => updateField("lastName", e.target.value)}
                 />
             </Field>
             <Field label="Email" error={errors.email}>

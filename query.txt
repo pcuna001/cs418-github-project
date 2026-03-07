@@ -2,6 +2,8 @@
 CREATE TABLE account_info(
     u_id int not null PRIMARY KEY AUTO_INCREMENT,
     u_username varchar(50) NOT NULL,
+    u_firstname varchar(50) NOT NULL,
+    u_lastname varchar(50) NOT NULL,
     u_email varchar(50) NOT NULL,
     u_password varchar(150) NOT NULL,
     u_verified int NOT NULL,

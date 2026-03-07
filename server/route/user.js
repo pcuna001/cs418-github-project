@@ -54,13 +54,15 @@ user.post("/", async(req,res) => {
     try {
         const {
             u_username,
+            u_firstname,
+            u_lastname,
             u_email,
             u_password,
             u_verified,
             u_admin
         } = req.body;
 
-        if (!u_username || !u_email || !u_password) {
+        if (!u_username || !u_firstname || !u_lastname || !u_email || !u_password) {
             return res.status(400).json({
                 status: 400,
                 message: "Required fields empty.",
@@ -72,10 +74,12 @@ user.post("/", async(req,res) => {
 
         const[result] = await connection.execute(
             `INSERT INTO account_info
-            (u_username, u_email, u_password, u_verified, u_admin)
-            VALUES (?, ?, ?, ?, ?)`,
+            (u_username, u_firstname, u_lastname, u_email, u_password, u_verified, u_admin)
+            VALUES (?, ?, ?, ?, ?, ?, ?)`,
             [
                 u_username,
+                u_firstname,
+                u_lastname,
                 u_email,
                 hashedPassword,
                 u_verified ?? 0,
@@ -102,7 +106,7 @@ user.put("/:id", async(req,res) => {
     try {
         const{ u_username, u_password } = req.body;
 
-        if (!u_username || !u_email || !u_password) {
+        if (!u_username || !u_password) {
             return res.status(400).json({
                 status: 400,
                 message: "Required fields empty.",
@@ -216,19 +220,19 @@ user.delete("/:id", async(req,res) => {
 // User login API
 user.post("/login", async(req,res) => {
     try {
-        const { u_username, u_password } = req.body || {};
+        const { u_username, u_email, u_password } = req.body || {};
 
         // Check input
-        if (!u_username || !u_password) {
+        if (!(u_username || u_email) || !u_password) {
             return res.status(400).json({
                 status: 400,
-                message: "Required username and password empty.",
+                message: "Required username/email and password empty.",
                 data: null
             });
         }
 
         // Query user
-        const[rows] = await connection.execute("SELECT * FROM account_info WHERE u_id = ? LIMIT 1", [req.params.id]);
+        const[rows] = await connection.execute("SELECT * FROM account_info WHERE u_username = ? LIMIT 1", [u_username]);
         if (rows.length === 0) {
             return res.status(401).json({
                 status: 401,

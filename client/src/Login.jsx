@@ -50,8 +50,11 @@ export default function Login() {
                 setError(json?.message || "Login has failed.");
                 return;
             }
-
-            // localStorage.setItem("pendingOtpEmail", enteredEmail);
+            
+            console.log(res);
+            console.log(res.email);
+            
+            localStorage.setItem("pendingOtpEmail", res.email);
 
             navigate("/verify-otp");
         } catch (err) {

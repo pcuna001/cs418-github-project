@@ -3,7 +3,7 @@ import 'dotenv/config';
 import express from 'express';
 import users from './route/user.js';
 const app=express();
-const port=3306;
+const port=3000;
 
 const myLogger=function(req,res,next){
     console.log('Logged middleware.');
